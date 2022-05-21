@@ -1,21 +1,29 @@
 import React, {useState} from "react";
-import {LocalBlogPost} from "../Interface/LocalBlogPost";
-import usePostBlog from "../Hook/usePostBlog";
+import {LocalCommentPost} from "../Interface/LocalCommentPost";
+import usePostComment from "../Hook/usePostComment";
 import {BlogInterface, LoginResponseInterface} from "../Interface/ResponsesInterfaces";
 import {StyledButton} from "./Styled/StyledButton";
 import {StyledForm} from "./Styled/StyledForm"
+import {StyledInput} from "./Styled/StyledInput"
+import {useParams} from "react-router-dom";
 
-interface BlogFormPropsInterface {
+interface CommentFormPropsInterface {
     loggedUser: LoginResponseInterface,
     setNeedsUpdate: React.Dispatch<boolean>
 }
 
-export default function CommentForm({loggedUser, setNeedsUpdate}: BlogFormPropsInterface) {
-    const [localBlog, setLocalBlog] = useState<LocalBlogPost>({content: "", title: ""})
-    const postBlog = usePostBlog();
+export default function CommentForm({loggedUser, setNeedsUpdate}: CommentFormPropsInterface) {
+    const imdb_id = useParams().id;
+    const [localComment, setLocalComment] = useState<LocalCommentPost>({
+        content: "",
+        title: "",
+        rating: 5,
+        imdb_id: imdb_id
+    })
+    const postComment = usePostComment();
 
     const handleChange = ({target}: any) => {
-        setLocalBlog(prev => ({
+        setLocalComment(prev => ({
             ...prev,
             [target.name]: target.value
         }))
@@ -24,10 +32,10 @@ export default function CommentForm({loggedUser, setNeedsUpdate}: BlogFormPropsI
     const handleSubmit = (e: any) => {
         e.preventDefault();
         if (loggedUser.token != null) {
-            postBlog(loggedUser.token, localBlog)
+            postComment(loggedUser.token, localComment)
                 .then(data => {
                     console.log(data)
-                    setLocalBlog({content: "", title: ""})
+                    setLocalComment({content: "", title: "", rating: 0, imdb_id: ""});
                     setNeedsUpdate(true);
                 })
         }
@@ -37,19 +45,19 @@ export default function CommentForm({loggedUser, setNeedsUpdate}: BlogFormPropsI
         <StyledForm onSubmit={handleSubmit}>
             <h2 >Want to leave a comment ?</h2>
             <div>
-                <input type="text"  placeholder="title"
-                       name='title' onChange={handleChange} value={localBlog.title}/>
+                <StyledInput type="text"  placeholder="title"
+                       name='title' onChange={handleChange} value={localComment.title}/>
 
             </div>
             <div >
-                <textarea placeholder="Write here"  name='content'
-                          style={{height: '100px'}} onChange={handleChange} value={localBlog.content}/>
+                <textarea placeholder="Write your comment here !"  name='content'
+                          style={{height: '100px', width: '300px', borderRadius: '5px', padding: '1%', border: 'none'}} onChange={handleChange} value={localComment.content}/>
 
             </div>
             <div>
                 <label htmlFor="rating">Rate out of 5</label>
                 <br/>
-                <select name="rating">
+                <select name="rating" onChange={handleChange}>
                 <option value="0">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>

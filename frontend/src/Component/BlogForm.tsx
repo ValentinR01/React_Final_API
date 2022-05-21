@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import {LocalBlogPost} from "../Interface/LocalBlogPost";
-import usePostBlog from "../Hook/usePostBlog";
+import {LocalCommentPost} from "../Interface/LocalCommentPost";
+import usePostBlog from "../Hook/usePostComment";
 import {BlogInterface, LoginResponseInterface} from "../Interface/ResponsesInterfaces";
 
 interface BlogFormPropsInterface {
@@ -9,7 +9,7 @@ interface BlogFormPropsInterface {
 }
 
 export default function BlogForm({loggedUser, setNeedsUpdate}: BlogFormPropsInterface) {
-    const [localBlog, setLocalBlog] = useState<LocalBlogPost>({content: "", title: ""})
+    const [localBlog, setLocalBlog] = useState<LocalCommentPost>({content: "", title: ""})
     const postBlog = usePostBlog();
 
     const handleChange = ({target}: any) => {

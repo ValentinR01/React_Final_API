@@ -131,7 +131,7 @@ export default function App() {
                             </>
                         }/>
 
-                        <Route path="film/:id" element={<DetailsPage/>}/>
+                        <Route path="film/:id" element={<DetailsPage loggedUser={loggedUser}/>}/>
 
 
 

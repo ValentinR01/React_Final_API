@@ -5,7 +5,7 @@ import {StyledDetailledDisplay} from './Styled/StyledDetailledDisplay'
 import GetComments from "./GetComments";
 import CommentForm from "./CommentForm";
 
-export default function DetailsPage () {
+export default function DetailsPage ({loggedUser}) {
     const id = useParams().id
     const [film, setfilm] = useState([])
 
@@ -34,7 +34,7 @@ export default function DetailsPage () {
                 </div>
             </StyledDetailledDisplay>
             <GetComments film_id={id}></GetComments>
-                <CommentForm></CommentForm>
+                <CommentForm loggedUser={loggedUser}></CommentForm>
             </>
         )
 }
